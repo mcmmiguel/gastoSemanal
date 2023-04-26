@@ -30,7 +30,8 @@ class Presupuesto {
     }
 
     eliminarGasto(id) {
-        this.gastos = gastos.filter(gasto => gasto.id !== id);
+        this.gastos = this.gastos.filter(gasto => gasto.id !== id);
+        this.calcularRestante();
     }
 };
 
@@ -70,7 +71,7 @@ class UI {
         
     }
     
-    agregarGastoListado(gastos) {
+    mostrarGastos(gastos) {
         
         this.limpiarHTML(); //Elimina el HTML previo
 
@@ -124,6 +125,9 @@ class UI {
         } else if(restante < (presupuesto * .5) ){
             divRestante.classList.remove('alert-success');
             divRestante.classList.add('alert-warning');
+        } else {
+            divRestante.classList.remove('alert-danger', 'alert-warning');
+            divRestante.classList.add('alert-success');
         }
 
         //Si el total es menos a cero
@@ -199,6 +203,9 @@ function eliminarGasto(id) {
     presupuesto.eliminarGasto(id);
 
     //Elimina los gastos del HTML
-    const {gastos} = presupuesto;
+    const {gastos, restante} = presupuesto;
     ui.mostrarGastos(gastos);
+
+    ui.actualizarRestante(restante);
+    ui.comprobarPresupuesto(presupuesto);
 }
